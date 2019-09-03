@@ -11,6 +11,7 @@ import (
 var serverUrl = "localhost:8080"
 
 func main() {
+
 	// Creates a router without any middleware by default
 	router := gin.New()
 
