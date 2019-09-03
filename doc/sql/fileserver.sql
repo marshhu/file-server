@@ -32,7 +32,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`user_name`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户信息表';
 
 -- 创建用户token表
 CREATE TABLE `user_token` (
@@ -41,7 +41,7 @@ CREATE TABLE `user_token` (
   `user_token` char(40) NOT NULL DEFAULT '' COMMENT '用户登录token',
     PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`user_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 -- 创建用户文件表
 CREATE TABLE `user_file` (

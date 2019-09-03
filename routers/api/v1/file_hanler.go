@@ -1,6 +1,7 @@
-package handler
+package v1
 
 import (
+	"file-server/pkg/setting"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,7 +15,9 @@ func UploadHandler(c *gin.Context) {
 	log.Println(file.Filename)
 	log.Println(file.Size)
 	// Upload the file to specific dst.
-	err := c.SaveUploadedFile(file, "./static/uploads/"+file.Filename)
+	fileAddr := setting.AppSetting.ImageSavePath + file.Filename
+	log.Println(fileAddr)
+	err := c.SaveUploadedFile(file, fileAddr)
 	if err != nil {
 		log.Fatal(err)
 	}
