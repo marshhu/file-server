@@ -1,6 +1,7 @@
 package main
 
 import (
+	"file-server/models"
 	"file-server/pkg/setting"
 	"file-server/routers"
 	"fmt"
@@ -12,6 +13,7 @@ import (
 
 func init() {
 	setting.Setup()
+	models.Setup()
 }
 
 func main() {

@@ -30,10 +30,15 @@ func InitRouter() *gin.Engine {
 
 	apiv1 := router.Group("/api/v1")
 	{
-		apiv1.POST("/file", v1.UploadHandler)
-		apiv1.GET("/file/:filesha1", v1.DownloadHandler)
-		apiv1.GET("/file", v1.GetAllHandler)
-		apiv1.DELETE("/file/:filesha1", v1.DeleteHandler)
+		file := apiv1.Group("/file")
+		{
+			file.POST("/", v1.UploadHandler)
+			file.GET("/:filesha1", v1.DownloadHandler)
+			file.GET("/", v1.GetAllHandler)
+			file.DELETE("/:filesha1", v1.DeleteHandler)
+		}
+
 	}
+	// router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return router
 }

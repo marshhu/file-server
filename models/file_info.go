@@ -1,16 +1,17 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type FileInfo struct {
-	ID       int       `gorm:"primary_key" json:"id"`
-	FileSha1 string    `json:"file_sha1"`
-	FileName string    `json:"file_name"`
-	FileSize int64     `json:"file_size"`
-	FileAddr string    `json:"file_addr"`
-	CreateAt time.Time `json:"create_at"`
-	UpdateAt time.Time `json:"update_at"`
-	Status   int       `json:"status"`
-	Ext1     int       `json:"ext1"`
-	Ext2     string    `json:"ext2"`
+	Id          int64     `xorm:"pk autoincr BIGINT(20)"`
+	FileSha1    string    `xorm:"not null comment('文件hash') unique CHAR(40)"`
+	FileName    string    `xorm:"not null comment('文件名') VARCHAR(256)"`
+	FileSize    int64     `xorm:"not null comment('文件大小') BIGINT(20)"`
+	FileAddress string    `xorm:"comment('文件存储位置') TEXT"`
+	CategoryNo  string    `xorm:"comment('所属分类') VARCHAR(64)"`
+	CreateAt    time.Time `xorm:"not null default 'CURRENT_TIMESTAMP' comment('创建时间') DATETIME"`
+	UpdateAt    time.Time `xorm:"not null default 'CURRENT_TIMESTAMP' comment('更新时间') DATETIME"`
+	Status      int       `xorm:"default 1 comment('状态(1、可用 2、禁用 3、已删除)') TINYINT(4)"`
 }
