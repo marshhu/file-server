@@ -37,7 +37,11 @@ func InitRouter() *gin.Engine {
 			file.GET("/", v1.GetAllHandler)
 			file.DELETE("/:filesha1", v1.DeleteHandler)
 		}
-
+		category := apiv1.Group("/category")
+		{
+			category.GET("/", v1.GetCategoryHandler)
+			category.POST("/", v1.AddCategoryHandler)
+		}
 	}
 	// router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return router

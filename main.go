@@ -2,6 +2,7 @@ package main
 
 import (
 	"file-server/models"
+	"file-server/pkg/logging"
 	"file-server/pkg/setting"
 	"file-server/routers"
 	"fmt"
@@ -12,8 +13,9 @@ import (
 )
 
 func init() {
-	setting.Setup()
+	setting.Setup("conf/app.ini")
 	models.Setup()
+	logging.Setup()
 }
 
 func main() {
