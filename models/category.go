@@ -1,30 +1,31 @@
 package models
 
 import (
-	"file-server/util"
+	uuid "github.com/satori/go.uuid"
 
 	"github.com/jinzhu/gorm"
 )
 
 type Category struct {
-	Id            int64  `gorm:"primary_key" json:"id"`
+	ID            int64  `gorm:"primary_key" json:"id"`
 	CategoryNo    string `json:"category_no"`
 	CategoryTitle string `json:"category_title"`
 	CategoryDesc  string `json:"category_desc"`
 }
 
 func AddCategory(categoryTitle string, categoryDesc string) error {
-	category_no, _ := util.NewUUID()
-	categroy := Category{CategoryNo: category_no, CategoryTitle: categoryTitle, CategoryDesc: categoryDesc}
-	if err := db.Create(&categroy).Error; err != nil {
+	uid,_ := uuid.NewV4()
+	categoryNo := uid.String()
+	category := Category{CategoryNo: categoryNo, CategoryTitle: categoryTitle, CategoryDesc: categoryDesc}
+	if err := db.Create(&category).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func ExistCategory(categroyNo string) (bool, error) {
+func ExistCategory(categoryNo string) (bool, error) {
 	var category Category
-	err := db.Select("categroy_no").Where("category_no = ?", categroyNo).First(&category).Error
+	err := db.Select("category_no").Where("category_no = ?", categoryNo).First(&category).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}

@@ -1,11 +1,13 @@
 package models
 
 import (
+	"file-server/pkg/util"
+	uuid "github.com/satori/go.uuid"
 	"time"
 )
 
 type User struct {
-	Id         int64     `gorm:"primary_key" json:"id"`
+	ID        int64     `gorm:"primary_key" json:"id"`
 	UserNo     string    `json:"user_no"`
 	Account    string    `json:"account"`
 	Pwd        string    `json:"pwd"`
@@ -17,3 +19,13 @@ type User struct {
 	Profile    string    `json:"profile"`
 	Status     int       `json:"status"`
 }
+
+func AddUser(account string,pwd string,userName string,phone string,email string) error{
+	uid,_ := uuid.NewV4()
+	user := User{UserNo:uid.String(),Account:account,Pwd:util.EncodeMD5(pwd),Phone:phone,Email:email,SignupAt:time.Now()}
+	if err := db.Create(&user).Error;err != nil{
+		return err
+	}
+	return nil
+}
+

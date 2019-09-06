@@ -8,8 +8,8 @@ import (
 )
 
 type App struct {
-	JwtSecret string
 	PageSize  int
+	JwtSecret string
 
 	RuntimeRootPath string
 

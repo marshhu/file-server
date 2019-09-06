@@ -3,7 +3,10 @@ package routers
 import (
 	v1 "file-server/routers/api/v1"
 
+	_ "file-server/docs"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
 // InitRouter initialize routing information
@@ -26,8 +29,6 @@ func InitRouter() *gin.Engine {
 		c.HTML(200, "index.html", nil)
 	})
 	// r.GET("/auth", api.GetAuth)
-	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	apiv1 := router.Group("/api/v1")
 	{
 		file := apiv1.Group("/file")
@@ -41,8 +42,9 @@ func InitRouter() *gin.Engine {
 		{
 			category.GET("/", v1.GetCategoryHandler)
 			category.POST("/", v1.AddCategoryHandler)
+			category.DELETE("/:category_no",v1.DeleteCategoryHandler)
 		}
 	}
-	// router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return router
 }

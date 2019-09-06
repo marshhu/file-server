@@ -15,3 +15,7 @@ type Category struct {
 func (c *Category) Add() error {
 	return models.AddCategory(c.CategoryTitle, c.CategoryTitle)
 }
+
+func (c *Category) Delete() error{
+	return  models.DeleteCategory(c.CategoryNo)
+}

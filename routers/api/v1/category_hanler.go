@@ -22,7 +22,7 @@ type AddCategoryForm struct {
 // @Summary Add Category
 // @Produce  json
 // @Param category_title body string true "CategoryTitle"
-// @Param category_desc body int false "CategoryDesc"
+// @Param category_desc body string true  "CategoryDesc"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Router /api/v1/category [post]
@@ -45,7 +45,26 @@ func AddCategoryHandler(c *gin.Context) {
 
 	err = categoryService.Add()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, e.ERROR_ADD_TAG_FAIL, nil)
+		appG.Response(http.StatusInternalServerError, e.ERROR_ADD_CATEGORY_FAIL, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
+}
+
+func DeleteCategoryHandler(c *gin.Context){
+	var (
+		appG = app.Gin{C: c}
+	)
+	categoryNo := c.Param("category_no")
+
+	categoryService := category_service.Category{
+		CategoryNo: categoryNo,
+	}
+
+	err := categoryService.Delete()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_DELETE_CATEGORY_FAIL, nil)
 		return
 	}
 
