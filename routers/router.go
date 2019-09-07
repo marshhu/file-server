@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"file-server/middleware/jwt"
 	v1 "file-server/routers/api/v1"
 
 	_ "file-server/docs"
@@ -30,6 +31,7 @@ func InitRouter() *gin.Engine {
 	})
 	// r.GET("/auth", api.GetAuth)
 	apiv1 := router.Group("/api/v1")
+	apiv1.Use(jwt.JWT())
 	{
 		file := apiv1.Group("/file")
 		{
