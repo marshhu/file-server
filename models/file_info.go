@@ -11,7 +11,6 @@ type FileInfo struct {
 	FileName    string    `json:"file_name"`
 	FileSize    int64     `json:"file_size"`
 	FileAddress string    `json:"file_address"`
-	CategoryNo  string    `json:"category_no"`
 	CreateAt    time.Time `json:"create_at"`
 	UpdateAt    time.Time `json:"update_at"`
 	Status      int       `json:"status"`
@@ -26,8 +25,8 @@ func ExistFileInfo(fileSha1 string) (bool,error){
 	return true, nil
 }
 
-func AddFileInfo(fileSha1 string,fileName string,fileSize int64,fileAddress string,categoryNo string) error{
-	fileInfo := FileInfo{FileSha1:fileSha1,FileName:fileName,FileSize:fileSize,FileAddress:fileAddress,CategoryNo:categoryNo}
+func AddFileInfo(fileSha1 string,fileName string,fileSize int64,fileAddress string) error{
+	fileInfo := FileInfo{FileSha1:fileSha1,FileName:fileName,FileSize:fileSize,FileAddress:fileAddress}
 	if err := db.Create(&fileInfo).Error;err !=nil{
 		return err
 	}

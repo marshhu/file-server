@@ -2,6 +2,7 @@ package models
 
 import (
 	uuid "github.com/satori/go.uuid"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
@@ -11,6 +12,10 @@ type Category struct {
 	CategoryNo    string `json:"category_no"`
 	CategoryTitle string `json:"category_title"`
 	CategoryDesc  string `json:"category_desc"`
+	ParentCategory  string `json:"parent_category"`
+	CategoryPath  string `json:"category_path"`
+	CreateAt    time.Time `json:"create_at"`
+	UpdateAt    time.Time `json:"update_at"`
 }
 
 func AddCategory(categoryTitle string, categoryDesc string) error {
