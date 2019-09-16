@@ -6,7 +6,8 @@ var MsgFlags = map[int]string{
 	INVALID_PARAMS:                  "请求参数错误",
 	ERROR_ADD_CATEGORY_FAIL:                 "添加分类失败",
 	ERROR_DELETE_CATEGORY_FAIL:				"删除分类失败",
-
+	ERROR_ADD_FILEINFO_FAIL:	"保存文件元数据信息失败",
+	ERROR_UPLOADFILE_FAIL:	"上传文件失败",
 	ERROR_AUTH_CHECK_TOKEN_FAIL:     "Token鉴权失败",
 	ERROR_AUTH_CHECK_TOKEN_TIMEOUT:  "Token已超时",
 	ERROR_AUTH_TOKEN:                "Token生成失败",

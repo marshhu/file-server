@@ -55,6 +55,14 @@ type Redis struct {
 
 var RedisSetting = &Redis{}
 
+type Oss struct{
+	OSSEndpoint string
+	OSSBucket string
+	OSSAccessKeyID string
+	OSSAccessKeySecret string
+}
+var OssSetting = &Oss{}
+
 var cfg *ini.File
 
 // Setup initialize the configuration instance
@@ -69,7 +77,7 @@ func Setup(confPath string) {
 	mapTo("server", ServerSetting)
 	mapTo("database", DatabaseSetting)
 	mapTo("redis", RedisSetting)
-
+	mapTo("oss",OssSetting)
 	AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second

@@ -2,17 +2,17 @@ package file
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
-	"mime/multipart"
 	"os"
 	"path"
 )
 
 // GetSize get the file size
-func GetSize(f multipart.File) (int, error) {
+func GetSize(f io.Reader) (int64, error) {
 	content, err := ioutil.ReadAll(f)
 
-	return len(content), err
+	return int64(len(content)), err
 }
 
 // GetExt get the file ext

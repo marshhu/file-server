@@ -16,19 +16,46 @@ type FileInfo struct {
 	Status      int       `json:"status"`
 }
 
-func ExistFileInfo(fileSha1 string) (bool,error){
+func GetFileInfo(fileSha1 string) (*FileInfo,error){
+	var fileInfo FileInfo
+	err := db.Where("file_sha1 = ?", fileSha1).First(&fileInfo).Error
+	if err != nil{
+		return nil,err
+	}
+	return &fileInfo,nil
+}
+
+func ExistFileInfo(fileSha1 string) bool{
 	var fileInfo FileInfo
 	err := db.Select("file_sha1").Where("file_sha1 = ?", fileSha1).First(&fileInfo).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
+	if err != nil || err != gorm.ErrRecordNotFound{
+      if len(fileInfo.FileSha1) > 0{
+      	return  true
+	  } else{
+	  	return  false
+	  }
 	}
-	return true, nil
+	if err == gorm.ErrRecordNotFound{
+	  return  false
+	}
+	return true
 }
 
 func AddFileInfo(fileSha1 string,fileName string,fileSize int64,fileAddress string) error{
-	fileInfo := FileInfo{FileSha1:fileSha1,FileName:fileName,FileSize:fileSize,FileAddress:fileAddress}
+	fileInfo := FileInfo{FileSha1:fileSha1,FileName:fileName,FileSize:fileSize,FileAddress:fileAddress,CreateAt:time.Now(),UpdateAt:time.Now(),Status:1}
 	if err := db.Create(&fileInfo).Error;err !=nil{
 		return err
 	}
 	return nil
+}
+
+func DeleteFileInfo(fileSha1 string) error{
+	err := db.Where("file_sha1 = ?", fileSha1).Delete(FileInfo{}).Error
+	return err
+}
+
+func UpdateFileInfo(fileSha1 string,fileName string,fileSize int64,fileAddress string) error{
+	fileInfo := FileInfo{FileSha1:fileSha1,FileName:fileName,FileSize:fileSize,FileAddress:fileAddress,UpdateAt:time.Now()}
+	err := db.Model(&fileInfo).Updates(FileInfo{FileName:fileInfo.FileName,FileSize:fileInfo.FileSize,FileAddress:fileInfo.FileAddress,UpdateAt:time.Now()}).Error
+	return err
 }
