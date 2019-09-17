@@ -17,6 +17,7 @@ func InitRouter() *gin.Engine {
 
 	//静态文件
 	router.Static("/assets", "./static")
+    router.Static("/tmp",".tmp")
 
 	router.GET("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
@@ -52,7 +53,6 @@ func InitRouter() *gin.Engine {
 		{
 			file.POST("/", v1.UploadHandler)
 			file.GET("/:filesha1", v1.DownloadHandler)
-			file.GET("/url/:filesha1", v1.GetFileUrlHandler)
 			file.GET("/", v1.GetAllHandler)
 			file.DELETE("/:filesha1", v1.DeleteHandler)
 		}

@@ -3,6 +3,7 @@ package oss
 import (
 	"file-server/pkg/logging"
 	"file-server/pkg/setting"
+	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
@@ -13,7 +14,7 @@ func Client() *oss.Client {
 	if ossCli != nil {
 		return ossCli
 	}
-	ossCli, err := oss.New(setting.OssSetting.OSSEndpoint,
+	ossCli, err := oss.New("http://"+ setting.OssSetting.OSSEndpoint,
 		setting.OssSetting.OSSAccessKeyID, setting.OssSetting.OSSAccessKeySecret)
 	if err != nil {
 		logging.Error(err)
@@ -36,12 +37,17 @@ func Bucket() *oss.Bucket {
 	return nil
 }
 
-// DownloadURL : 临时授权下载url
-func DownloadURL(objName string) string {
+// GetSignURL : 获取临时签名访问URL
+func GetSignURL(objName string) string {
 	signedURL, err := Bucket().SignURL(objName, oss.HTTPGet, 3600)
 	if err != nil {
 		logging.Error(err)
 		return ""
 	}
 	return signedURL
+}
+
+//获取公共访问URL
+func GetPublicURL(objName string) string{
+	return  fmt.Sprintf("http://%s.%s/%s",setting.OssSetting.OSSBucket,setting.OssSetting.OSSEndpoint,objName)
 }

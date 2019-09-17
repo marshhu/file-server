@@ -24,9 +24,9 @@ func UploadHandler(c *gin.Context) {
 	f, _ := c.FormFile("file")
 
 	// Upload the file to specific dst.
-	//fileAddr := setting.AppSetting.ImageSavePath + file.Filename
+	//fileAddr := setting.AppSetting.TmpFilePath + f.Filename
 	//log.Println(fileAddr)
-	//err := c.SaveUploadedFile(file, fileAddr)
+	//err := c.SaveUploadedFile(f, fileAddr)
 	//if err != nil {
 	//	log.Fatal(err)
 	//}
@@ -47,7 +47,8 @@ func UploadHandler(c *gin.Context) {
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_UPLOADFILE_FAIL, nil)
 	}
-	fileMeta.FileAddress = objectKey
+	fileMeta.FileName = objectKey  //文件名
+	fileMeta.FileAddress = oss.GetPublicURL(objectKey)  //访问URL
     result,_ :=	fileMeta.AddFileInfo()
     if result{
 		appG.Response(http.StatusOK, e.SUCCESS, fileMeta)
@@ -55,7 +56,6 @@ func UploadHandler(c *gin.Context) {
 		os.Remove(fileMeta.FileAddress)
 		appG.Response(http.StatusInternalServerError, e.ERROR_ADD_FILEINFO_FAIL, nil)
 	}
-
 }
 
 //下载
@@ -77,7 +77,7 @@ func GetFileUrlHandler(c *gin.Context) {
 	if err != nil{
 		appG.Response(http.StatusNotFound, e.SUCCESS, nil)
 	}
-	signedURL := oss.DownloadURL(fileInfo.FileAddress)
+	signedURL := oss.GetSignURL(fileInfo.FileAddress)
 	appG.Response(http.StatusOK, e.SUCCESS, signedURL)
 }
 
