@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"file-server/middleware/cors"
 	"file-server/routers/api"
 	v1 "file-server/routers/api/v1"
 
@@ -15,7 +16,8 @@ func InitRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
-
+	// 允许使用跨域请求  全局中间件
+	router.Use(cors.Cors())
 	//静态文件
 	router.Static("/assets", "./static")
     router.Static("/tmp",".tmp")
