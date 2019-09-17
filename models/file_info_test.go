@@ -1,11 +1,5 @@
 package models
 
-import (
-	"file-server/pkg/util"
-	"os"
-	"testing"
-)
-
 //func TestAddFileInfo(t *testing.T) {
 //	fileAddress :=`upload/images/avtaar.jpg`
 //	f,_:= os.Open(fileAddress)
@@ -19,16 +13,16 @@ import (
 //	}
 //}
 
-func TestExistFileInfo(t *testing.T) {
-	fileAddress :=`upload/images/avtaar.jpg`
-	f,_:= os.Open(fileAddress)
-	fileSha1 := util.FileSha1(f)
-
-	isExit := ExistFileInfo(fileSha1)
-	if isExit{
-	  t.Fail()
-	}
-}
+//func TestExistFileInfo(t *testing.T) {
+//	fileAddress :=`upload/images/avtaar.jpg`
+//	f,_:= os.Open(fileAddress)
+//	fileSha1 := util.FileSha1(f)
+//
+//	isExit := ExistFileInfo(fileSha1)
+//	if isExit{
+//	  t.Fail()
+//	}
+//}
 
 //func TestDeleteFileInfo(t *testing.T) {
 //	fileAddress :=`upload/images/avtaar.jpg`

@@ -22,10 +22,24 @@ type User struct {
 
 func AddUser(account string,pwd string,userName string,phone string,email string) error{
 	uid,_ := uuid.NewV4()
-	user := User{UserNo:uid.String(),Account:account,Pwd:util.EncodeMD5(pwd),Phone:phone,Email:email,SignupAt:time.Now()}
-	if err := db.Create(&user).Error;err != nil{
+	user := User{UserNo:uid.String(),Account:account,Pwd:util.EncodeMD5(pwd),UserName:userName,Phone:phone,Email:email,SignupAt:time.Now(),LastActive:time.Now(),Status:1}
+	err := db.Create(&user).Error
+	if err != nil{
 		return err
 	}
 	return nil
 }
 
+func CheckUser(account,password string) (bool,error){
+	user := User{}
+	err := db.Select("id").Where(User{Account: account, Pwd: password}).First(&user).Error
+	if err != nil {
+		return false, err
+	}
+
+	if user.ID > 0 {
+		return true, nil
+	}
+
+	return false, nil
+}

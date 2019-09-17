@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"file-server/routers/api"
 	v1 "file-server/routers/api/v1"
 
 	_ "file-server/docs"
@@ -62,6 +63,13 @@ func InitRouter() *gin.Engine {
 			category.POST("/", v1.AddCategoryHandler)
 			category.DELETE("/:category_no",v1.DeleteCategoryHandler)
 		}
+	}
+
+	user := router.Group("/api/user")
+	{
+		user.POST("/login",api.LoginHandler)
+		user.GET("/getInfo",api.GetInfoHandler)
+		user.POST("/logout",api.LogoutHandler)
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return router
