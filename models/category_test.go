@@ -15,9 +15,9 @@ func clearTables() {
 func TestMain(m *testing.M) {
 	setting.Setup("../conf/app.ini")
 	Setup()
-	clearTables()
+	//clearTables()
 	m.Run()
-	clearTables()
+	//clearTables()
 }
 
 // func TesCategoryWorkFlow(t *testing.T) {

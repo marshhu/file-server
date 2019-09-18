@@ -3,6 +3,7 @@ package api
 import (
 	"file-server/pkg/app"
 	"file-server/pkg/e"
+	"file-server/pkg/logging"
 	"file-server/pkg/util"
 	"file-server/services/user_service"
 	"fmt"
@@ -11,30 +12,32 @@ import (
 )
 
 //登录
-type auth struct {
-	Account string `form:"account" valid:"Required; MaxSize(50)"`
-	Password string `form:"password" valid:"Required; MaxSize(50)"`
+type User struct {
+	UserName    string `form:"username"`
+	Password string `form:"password"`
 }
 
-// @Summary Get Auth
+// @Summary Login
 // @Produce  json
-// @Param account query string true "userName"
-// @Param password query string true "password"
+// @Param username query string
+// @Param password query string
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router /auth [get]
+// @Router /api/user/login [get]
 func LoginHandler(c *gin.Context) {
 	appG := app.Gin{C: c}
-	a := auth{}
+	a := User{}
 	err := c.ShouldBind(&a)
 	if err != nil {
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, err.Error)
 		return
 	}
 
-	authService := user_service.Auth{Account: a.Account, Password: a.Password}
-	isExist, err := authService.Check()
+
+	authService := user_service.User{UserName: a.UserName, Password: a.Password}
+	isExist, err := authService.Login()
 	if err != nil {
+		logging.Error(err)
 		appG.Response(http.StatusInternalServerError, e.ERROR_AUTH_CHECK_TOKEN_FAIL, nil)
 		return
 	}
@@ -44,7 +47,7 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 
-	token, err := util.GenerateToken(a.Account, a.Password)
+	token, err := util.GenerateToken(a.UserName, a.Password)
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_AUTH_TOKEN, nil)
 		return

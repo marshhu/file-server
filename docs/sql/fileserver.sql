@@ -36,9 +36,8 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_no` varchar(64) COLLATE utf8_croatian_ci NOT NULL COMMENT '用户编号',
-  `account` varchar(64) COLLATE utf8_croatian_ci NOT NULL COMMENT '登录账号',
-  `pwd` varchar(256) COLLATE utf8_croatian_ci NOT NULL COMMENT '登录密码',
   `user_name` varchar(64) COLLATE utf8_croatian_ci DEFAULT NULL COMMENT '用户名',
+  `password` varchar(256) COLLATE utf8_croatian_ci NOT NULL COMMENT '登录密码',
   `phone` varchar(64) COLLATE utf8_croatian_ci DEFAULT NULL COMMENT '手机',
   `email` varchar(128) COLLATE utf8_croatian_ci DEFAULT NULL COMMENT '邮箱',
   `signup_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
@@ -47,7 +46,6 @@ CREATE TABLE `user` (
   `status` tinyint(4) DEFAULT '1' COMMENT '状态(1、可用 2、禁用 3、已删除)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_user_no` (`user_no`),
-  UNIQUE KEY `uq_account` (`account`),
   UNIQUE KEY `uq_user_name` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
 
