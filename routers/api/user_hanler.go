@@ -32,10 +32,8 @@ func LoginHandler(c *gin.Context) {
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, err.Error)
 		return
 	}
-
-
-	authService := user_service.User{UserName: a.UserName, Password: a.Password}
-	isExist, err := authService.Login()
+	userService := user_service.User{UserName: a.UserName, Password: a.Password}
+	isExist, err := userService.Login()
 	if err != nil {
 		logging.Error(err)
 		appG.Response(http.StatusInternalServerError, e.ERROR_AUTH_CHECK_TOKEN_FAIL, nil)
@@ -60,7 +58,25 @@ func LoginHandler(c *gin.Context) {
 
 //获取用户信息
 func GetInfoHandler(c *gin.Context){
-	fmt.Printf("this is GetInfoHandler")
+	appG := app.Gin{C: c}
+	token := c.Query("token")
+	if token == "" {
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+	} else {
+		claims, err := util.ParseToken(token)
+		if err != nil{
+			appG.Response(http.StatusUnauthorized, e.INVALID_PARAMS, err.Error)
+		}
+		userService := user_service.User{UserName: claims.Username}
+		userInfo,err := userService.GetUserInfo()
+		if err != nil{
+			appG.Response(http.StatusInternalServerError, e.ERROR, err.Error)
+		}
+		appG.Response(http.StatusOK, e.SUCCESS, map[string]string{
+			"name": userInfo.UserName,
+			"avatar":userInfo.Avatar,
+		})
+	}
 }
 
 //退出
