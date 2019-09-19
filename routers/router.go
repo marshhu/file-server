@@ -2,9 +2,11 @@ package routers
 
 import (
 	"file-server/middleware/cors"
-	"file-server/middleware/jwt"
+	"file-server/pkg/app"
+	"file-server/pkg/e"
 	"file-server/routers/api"
 	v1 "file-server/routers/api/v1"
+	"net/http"
 
 	_ "file-server/docs"
 	"github.com/gin-gonic/gin"
@@ -24,7 +26,10 @@ func InitRouter() *gin.Engine {
     router.Static("/tmp",".tmp")
 
 	router.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
+		var (
+			appG = app.Gin{C: c}
+		)
+		appG.Response(http.StatusOK, e.SUCCESS, "pong")
 	})
 
 	//渲染html页面
@@ -35,11 +40,12 @@ func InitRouter() *gin.Engine {
 	})
 
 	apiv1 := router.Group("/api/v1")
-	apiv1.Use(jwt.JWT())
+	//apiv1.Use(jwt.JWT())
 	{
 		file := apiv1.Group("/file")
 		{
-			file.POST("/", v1.UploadHandler)
+			file.POST("/", v1.UploadSingleHandler)
+			file.POST("/uploadMulti", v1.UploadMultiHandler)
 			file.GET("/:filesha1", v1.DownloadHandler)
 			file.GET("/", v1.GetAllHandler)
 			file.DELETE("/:filesha1", v1.DeleteHandler)
